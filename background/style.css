@@ -1,7 +1,4 @@
-@media (max-width: 600px) {
-  .gif-container {
-    flex-direction: column;
-  }
+
 body {
   background: black;
   margin: 0;
