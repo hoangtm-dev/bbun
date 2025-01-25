@@ -24,28 +24,6 @@
         <canvas id="testCanvas" width="550" height="500" class="hidden"></canvas>
         <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
         <script src="script.js"></script>
-    <script>
-        // Ngăn chặn chuột phải
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // Ngăn chặn F12
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
-        });
-
-        // Kiểm tra nếu Developer Tools đang mở
-        setInterval(function() {
-            const devToolsOpen = window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100;
-            if (devToolsOpen) {
-                alert('Skid ra chỗ khác bạn ey');
-                // Bạn có thể thực hiện hành động khác ở đây, như chuyển hướng hoặc ẩn nội dung
-            }
-        }, 1000);
-    </script>
       </body>
       
 </body>
