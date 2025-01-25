@@ -1,0 +1,329 @@
+body {
+  background: black;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Chiếm toàn bộ chiều cao của viewport */
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; 
+}
+
+.box::before {
+  content: '';
+  width: 440px;
+  height: 440px;
+  background-color: #89cff0;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.box-body {
+  position: relative;
+  height: 200px;
+  width: 200px;
+  margin-top: 123.33px;
+  background: linear-gradient(#762c2c, #ff0303);
+  border-bottom-left-radius: 5%;
+  border-bottom-right-radius: 5%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+/* Phần còn lại giữ nguyên */
+
+.box-body .img {
+  opacity: 0;
+  transform: translateY(0%);
+  transition: all 0.5s;
+  margin: 0 auto;
+  display: block;
+}
+
+.box-body:hover {
+  cursor: pointer;
+  animation: box-body 1s forwards ease-in-out;
+}
+
+.box-body:hover .img {
+  opacity: 1;
+  z-index: 0;
+  transform: translateY(-157px);
+}
+
+.box-body:hover .box-lid {
+  animation: box-lid 1s forwards ease-in-out;
+}
+
+.box-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  background: linear-gradient(#ffffff, #ffefa0);
+}
+
+.box-lid {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 90%;
+  height: 40px;
+  width: 220px;
+  background-color: #cc231e;
+  border-radius: 5%;
+  box-shadow: 0 8px 4px -4px rgba(0, 0, 0, 0.3);
+}
+
+.box-lid::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  background: linear-gradient(#ffefa0, #fff);
+}
+
+.box-bowtie {
+  z-index: 1;
+  height: 100%;
+}
+
+.box-bowtie::before,
+.box-bowtie::after {
+  content: '';
+  width: 83.33px;
+  height: 83.33px;
+  border: 16.67px solid white;
+  border-radius: 50% 50% 0 50%;
+  position: absolute;
+  bottom: 99%;
+  z-index: -1;
+}
+
+.box-bowtie::before {
+  left: 50%;
+  transform: translateX(-100%) skew(10deg, 10deg);
+}
+
+.box-bowtie::after {
+  left: 50%;
+  transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
+}
+
+@keyframes box-lid {
+  0%,
+  42% {
+    transform: translate3d(-50%, 0, 0) rotate(0deg);
+  }
+  60% {
+    transform: translate3d(-85%, -230%, 0) rotate(-25deg);
+  }
+  90%,
+  100% {
+    transform: translate3d(-119%, 225%, 0) rotate(-70deg);
+  }
+}
+
+@keyframes box-body {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(0, 25%, 0) rotate(20deg);
+  }
+  50% {
+    transform: translate3d(0, -15%, 0) rotate(0deg);
+  }
+  70% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes box-bowtie-right {
+  0%,
+  50%,
+  75% {
+    transform: translateX(0) rotate(90deg) skew(10deg, 10deg);
+  }
+  90%,
+  100% {
+    transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+    box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes box-bowtie-left {
+  0% {
+    transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+  }
+  50%,
+  75% {
+    transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+  }
+  90%,
+  100% {
+    transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+  }
+}
+#starCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Đặt canvas ở dưới cùng */
+}
+    .image-circle {
+      width: 150px; /* Slightly larger circle size */
+      height: 150px; /* Update to match the width */
+      border-radius: 50%; /* Keeps the image rounded */
+      overflow: hidden; /* Hides overflow */
+      margin: 20px auto; /* Centered and with some space above and below */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid #ccc; /* Optional border */
+  }
+  
+  .image-circle img {
+      width: 100%; /* Ensures the image fills the circle */
+      height: auto; /* Maintains the image aspect ratio */
+  }
+  
+  .text-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+  }
+  
+  textarea {
+      width: 80%; /* Width of the text area */
+      height: 100px; /* Height of the text area */
+      margin: 40px; /* Adds some space around the text area */
+      padding: 20px; /* Adds padding inside the text area */
+      border: 1px solid #ccc; /* Border for the text area */
+      border-radius: 10px; /* Rounded corners */
+      resize: none; /* Prevents resizing of the text area */
+  }
+
+.box-body.fade-out {
+  opacity: 0; /* Làm mờ hộp */
+  transition: opacity 0.5s ease; /* Hiệu ứng chuyển động */
+}
+.image {
+  position: absolute;
+  width: 250px;
+  height: 180px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+}
+
+.image.show {
+  opacity: 1; /* Show the image */
+}
+
+.image.jump-out {
+  transform: scale(1.5); /* Enlarge the image */
+}
+
+.hidden {
+  display: none;
+}
+
+.image {
+  margin-top: 20px;
+}
+
+.jump-out {
+  animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+      opacity: 1;
+  }
+  100% {
+      opacity: 0;
+  }
+}
+.image {
+  text-align: center; /* Căn giữa văn bản */
+  margin-top: 20px; /* Khoảng cách trên */
+}
+
+.image img {
+  max-width: 100%; /* Đảm bảo hình ảnh không vượt quá chiều rộng của container */
+  height: auto; /* Giữ tỷ lệ khung hình */
+}
+
+.image h1 {
+  margin-top: 10px; /* Khoảng cách giữa hình ảnh và văn bản */
+  font-size: 24px; /* Kích thước chữ */
+  color: #f0f5f4; /* Màu chữ */
+}
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.letter {
+  background: linear-gradient(rgb(230, 167, 177),rgb(166, 241, 216));
+  padding: 10px; /* Đảm bảo không có khoảng đệm */
+  display: none; /* Ban đầu ẩn đi */
+  opacity: 0;
+  transition: opacity 0.5s ease-out; /* Hiệu ứng hiện dần */
+  margin: auto;
+  position: absolute;
+  border-radius: 12px;
+  padding: 10px; /* Thêm khoảng đệm để văn bản không sát lề */
+  white-space: pre-wrap; /* Đảm bảo dòng văn bản không bị cắt */
+  box-sizing: border-box; /* Đảm bảo kích thước tính cả padding */
+}
+.letter h1{
+  margin: auto;
+  position: absolute;
+}
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
+.letter {
+  background-color: white;
+  display: inline-block;
+  opacity: 0;
+  padding: 5px;
+  margin: auto;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  font-size: 40px;
+}

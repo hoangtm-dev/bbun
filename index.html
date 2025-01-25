@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/style.css">
+    <title>Gift For bunbun :3</title>
+</head>
+<body>
+    <div class="container">
+        <div class="gif-container">
+            <img id="niceImage" src="images/nice.gif" alt="Nice sticker" style="display: none;">
+            <img id="sadImage" src="images/sad.gif" alt="Sad sticker" style="display: block;width: 180px; height: 200px">
+            <img id="happyImage" src="images/happy.gif" alt="Happy sticker" style="display: none;">
+        </div>
+        <div class="typewriter">
+            <h1>Chị có yêu em hk</h1>
+        <div class="type">
+            <h1 hidden>đùa thôi</h1>
+        </div>
+        </div>
+        <div class="button-container">
+            <button class="accept" onclick="showNiceImage()">Có</button>
+            <button class="no" onclick="showSadImage()">Hông</button>
+        </div>
+        <canvas id="c"></canvas>
+    </div>
+    <script src="src/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden; /* Ẩn cả thanh cuộn ngang và dọc */
+  background: linear-gradient(#b1f3b1, #ebbac2);
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 2s ease; /* Thời gian hiệu ứng mờ dần */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.gif-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.gif-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.typewriter {
+  text-align: center; /* Căn giữa chữ trong phần tử .typewriter */
+  padding-top: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 60px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.accept{
+  color: #000000;
+  background-color:  #FFFFFF;
+}
+
+.accept, .no {
+  width: 180px; /* Đảm bảo cả hai nút có cùng chiều rộng */
+  height: 80px; /* Đảm bảo cả hai nút có cùng chiều cao */
+  border-radius: 10px;
+  display: flex;
+  align-items: center; /* Căn chỉnh chữ giữa theo chiều dọc */
+  justify-content: center; /* Căn chỉnh chữ giữa theo chiều ngang */
+  text-align: center; /* Căn chỉnh chữ giữa theo chiều ngang */
+}
+.type {
+  text-align: center; /* Căn giữa chữ trong phần tử .typewriter */
+  padding-top: 20px;
+}
+.type h1 {
+  color: #fff;
+  font-family: monospace;
+  overflow: hidden; /* Đảm bảo nội dung không bị lộ ra trước khi hiệu ứng bắt đầu */
+  border-right: .15em solid orange; /* Con trỏ của hiệu ứng đánh máy */
+  white-space: nowrap; /* Giữ nội dung trên một dòng */
+  margin: 0 auto; /* Tạo hiệu ứng cuộn khi đánh máy */
+  letter-spacing: .15em; /* Điều chỉnh khoảng cách giữa các chữ cái */
+  animation: 
+      typing 3.5s steps(30, end),
+      blink-caret .5s step-end infinite;
+}
+/* CSS cho hiệu ứng đánh máy */
+.typewriter h1 {
+  color: #fff;
+  font-family: monospace;
+  overflow: hidden; /* Đảm bảo nội dung không bị lộ ra trước khi hiệu ứng bắt đầu */
+  border-right: .15em solid orange; /* Con trỏ của hiệu ứng đánh máy */
+  white-space: nowrap; /* Giữ nội dung trên một dòng */
+  margin: 0 auto; /* Tạo hiệu ứng cuộn khi đánh máy */
+  letter-spacing: .15em; /* Điều chỉnh khoảng cách giữa các chữ cái */
+  animation: 
+      typing 3.5s steps(30, end),
+      blink-caret .5s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange }
+}
+
+/* Media Queries cho thiết bị di động */
+@media (max-width: 600px) {
+  .gif-container {
+    flex-direction: column;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .accept, .no {
+    width: 140px; /* Điều chỉnh chiều rộng cho thiết bị di động */
+    height: 60px; /* Điều chỉnh chiều cao cho thiết bị di động */
+  }
+
+  .typewriter h1 {
+    font-size: 18px; /* Điều chỉnh kích thước chữ cho thiết bị di động */
+  }
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.box {
+  position: relative;
+}
+
+.box::before {
+  content: "";
+  width: 440px;
+  height: 440px;
+  background-color: #89cff0;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.box-body {
+  position: relative;
+  height: 200px;
+  width: 200px;
+  margin-top: 123.3333333333px;
+  background-color: #cc231e;
+  border-bottom-left-radius: 5%;
+  border-bottom-right-radius: 5%;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(#762c2c, #ff0303);
+}
+
+.box-body .img {
+  opacity: 0;
+  transform: translateY(0%);
+  transition: all 0.5s;
+  margin: 0 auto;
+  display: block;
+}
+
+.box-body:hover {
+  cursor: pointer;
+  animation: box-body 1s forwards ease-in-out;
+}
+
+.box-body:hover .img {
+  opacity: 1;
+  z-index: 0;
+  transform: translateY(-157px);
+}
+
+.box-body:hover .box-lid {
+  animation: box-lid 1s forwards ease-in-out;
+}
+
+.box-body:hover .box-bowtie::before {
+  animation: box-bowtie-left 1.1s forwards ease-in-out;
+}
+
+.box-body:hover .box-bowtie::after {
+  animation: box-bowtie-right 1.1s forwards ease-in-out;
+}
+
+.box-body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  background: linear-gradient(#ffffff, #ffefa0);
+}
+
+.box-lid {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 90%;
+  height: 40px;
+  background-color: #cc231e;
+  width: 220px;
+  border-radius: 5%;
+  box-shadow: 0 8px 4px -4px rgba(0, 0, 0, 0.3);
+}
+
+.box-lid::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  background: linear-gradient(#ffefa0, #fff);
+}
+
+.box-bowtie {
+  z-index: 1;
+  height: 100%;
+}
+
+.box-bowtie::before, .box-bowtie::after {
+  content: "";
+  width: 83.3333333333px;
+  height: 83.3333333333px;
+  border: 16.6666666667px solid white;
+  border-radius: 50% 50% 0 50%;
+  position: absolute;
+  bottom: 99%;
+  z-index: -1;
+}
+
+.box-bowtie::before {
+  left: 50%;
+  transform: translateX(-100%) skew(10deg, 10deg);
+}
+
+.box-bowtie::after {
+  left: 50%;
+  transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
+}
+
+@keyframes box-lid {
+  0%, 42% {
+    transform: translate3d(-50%, 0%, 0) rotate(0deg);
+  }
+  60% {
+    transform: translate3d(-85%, -230%, 0) rotate(-25deg);
+  }
+  90%, 100% {
+    transform: translate3d(-119%, 225%, 0) rotate(-70deg);
+  }
+}
+
+@keyframes box-body {
+  0% {
+    transform: translate3d(0%, 0%, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(0%, 25%, 0) rotate(20deg);
+  }
+  50% {
+    transform: translate3d(0%, -15%, 0) rotate(0deg);
+  }
+  70% {
+    transform: translate3d(0%, 0%, 0) rotate(0deg);
+  }
+}
+
+@keyframes box-bowtie-right {
+  0%, 50%, 75% {
+    transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
+  }
+  90%, 100% {
+    transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+  }
+}
+
+@keyframes box-bowtie-left {
+  0% {
+    transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+  }
+  50%, 75% {
+    transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+  }
+  90%, 100% {
+    transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+  }
+}
