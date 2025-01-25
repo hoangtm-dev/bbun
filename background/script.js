@@ -1,4 +1,4 @@
-const messages = ["Ummm","...", "Ừ thì",".", "snhat", "thì", "người yêu của em sẽ thêm 1 tuổi mới nữa","...", "nhưng mà","chị vẫn mãi là babi của e", "Em sẽ không chúc chị hạnh phúc","vì như thế có nghĩa là yêu e chị sẽ không được hạnh phúc","(có thể là vậy thật)","...đôi lúc","Thay vào đó,","em mong sau này sẽ có cơ hội","...","nói ra hơi xấu hổ","...","g-gặp nhau và ở bên nhau","lâu dài!","và trọn vẹn nhất","..."];
+const messages = ["Ummm","...", "Ừ thì","....", "snhat", "thì", "người yêu của em sẽ thêm 1 tuổi mới nữa","...", "nhưng mà","chị vẫn mãi là babi của e", "Em sẽ không chúc chị hạnh phúc","vì như thế có nghĩa là yêu e chị sẽ không được hạnh phúc","(có thể là vậy thật)","...đôi lúc","Thay vào đó,","em mong sau này sẽ có cơ hội","...","nói ra hơi xấu hổ","...","g-gặp nhau và ở bên nhau","lâu dài!","và trọn vẹn nhất","..."];
 let messageIndex = 1;
 
 function updateMessage() {
@@ -144,7 +144,7 @@ function updateMessage() {
     setTimeout(() => {
       const message = messages[messageIndex];
       if (message !== undefined && message !== null) { // Check if message is valid
-        whiteBox.innerHTML = message + "."; // Add a dot at the end of each message
+        whiteBox.innerHTML = message; // Add a dot at the end of each message
       }
       whiteBox.classList.remove("fade-out");
       whiteBox.classList.add("fade-in");
