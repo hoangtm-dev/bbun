@@ -115,18 +115,20 @@ document.addEventListener('DOMContentLoaded', function() {
     buttonNo.addEventListener('click', function() {
         clickCountNo++;
         setRandomPosition(buttonNo, buttonAccept);
-
+    
         if (sadImage) {
             niceImage.style.display = 'none';
             happyImage.style.display = 'none';
             sadImage.style.display = 'block';
         }
-
-        if (clickCountNo === 6) {
-            resetAllElements();
+    
+        // Thay đổi giới hạn số lần nhấn nút "No"
+        if (clickCountNo > 5) { // Giới hạn là 5 lần nhấn
+            // Tạo một thông báo và chuyển hướng đến một trang khác
+            alert(":(((((");
+            window.location.href = "https://chighetemrui.com";
         }
     });
-
     buttonAccept.addEventListener('mouseover', function() {
         if (happyImage) {
             niceImage.style.display = 'none';
