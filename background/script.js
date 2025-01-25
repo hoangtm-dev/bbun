@@ -161,3 +161,22 @@ function updateMessage() {
     }, 1000); // Adjust fade-out time
   }
 }
+                document.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                });
+        
+                // Ngăn chặn F12
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+                        e.preventDefault();
+                    }
+                });
+        
+                // Kiểm tra nếu Developer Tools đang mở
+                setInterval(function() {
+                    const devToolsOpen = window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100;
+                    if (devToolsOpen) {
+                        alert('Skid ra chỗ khác bạn ey');
+                        // Bạn có thể thực hiện hành động khác ở đây, như chuyển hướng hoặc ẩn nội dung
+                    }
+                }, 1000);
