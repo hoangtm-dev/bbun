@@ -1,6 +1,24 @@
-const messages = ["Hi cậu", "Xin chào", "How are you?", "Hello!"];
+const messages = ["Ummm","...", "Ừ thì",".", "snhat", "thì", "người yêu của em sẽ thêm 1 tuổi mới nữa","...", "nhưng mà","chị vẫn mãi là babi của e", "Em sẽ không chúc chị hạnh phúc","vì như thế có nghĩa là yêu e chị sẽ không được hạnh phúc","(có thể là vậy thật)","...đôi lúc","Thay vào đó,","em mong sau này sẽ có cơ hội","...","nói ra hơi xấu hổ","...","g-gặp nhau và ở bên nhau","lâu dài!","và trọn vẹn nhất","..."];
 let messageIndex = 1;
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
 
+// Ngăn chặn F12
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+      e.preventDefault();
+  }
+});
+
+// Kiểm tra nếu Developer Tools đang mở
+setInterval(function() {
+  const devToolsOpen = window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100;
+  if (devToolsOpen) {
+      alert('Skid ra chỗ khác bạn ey');
+      // Bạn có thể thực hiện hành động khác ở đây, như chuyển hướng hoặc ẩn nội dung
+  }
+}, 1000);
 function updateMessage() {
   const whiteBox = document.getElementById("white-box");
 
@@ -136,4 +154,28 @@ function init() {
         captureContainer.updateCache("source-over");
         stage.update(event);
     }
+}
+function updateMessage() {
+  const whiteBox = document.getElementById("white-box");
+  if (messageIndex < messages.length) {
+    whiteBox.classList.add("fade-out");
+    setTimeout(() => {
+      const message = messages[messageIndex];
+      if (message !== undefined && message !== null) { // Check if message is valid
+        whiteBox.innerHTML = message + "."; // Add a dot at the end of each message
+      }
+      whiteBox.classList.remove("fade-out");
+      whiteBox.classList.add("fade-in");
+
+      setTimeout(() => {
+        whiteBox.classList.remove("fade-in");
+        messageIndex++;
+        if (messageIndex === messages.length) {
+          // Chuyển sang trang chính còn nền
+          window.location.href = "happy/index.html";
+        }
+      }, 1000); // Adjust fade-in time
+
+    }, 1000); // Adjust fade-out time
+  }
 }

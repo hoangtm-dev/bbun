@@ -4,12 +4,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const niceImage = document.getElementById('niceImage');
     const sadImage = document.getElementById('sadImage');
     const happyImage = document.getElementById('happyImage');
+    
+    // Initially display 'sad' image
+    if (sadImage) {
+        sadImage.style.display = 'block';
+        niceImage.style.display = 'none';
+        happyImage.style.display = 'none';
+    }
+
     const typewriterElement = document.querySelector('.typewriter h1');
     let clickCountAccept = 0;
     let clickCountNo = 0;
-    let typingInterval; 
-    let deletingInterval; 
-    let changingText = false; // Thêm cờ kiểm soát việc thay đổi văn bản
+    let deletingInterval;
+    let changingText = false;
 
     const initialPositionAccept = {
         top: buttonAccept.offsetTop,
@@ -31,50 +38,21 @@ document.addEventListener('DOMContentLoaded', function() {
             randomX = Math.random() * maxX;
             randomY = Math.random() * maxY;
 
-            const elementRect = element.getBoundingClientRect();
             const typewriterRect = typewriterElement.getBoundingClientRect();
             const otherElementRect = otherElement.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
 
-            const isOverlappingWithTypewriter = !(
+            isOverlapping = !(
                 randomX + elementRect.width < typewriterRect.left ||
                 randomX > typewriterRect.right ||
                 randomY + elementRect.height < typewriterRect.top ||
                 randomY > typewriterRect.bottom
-            );
-
-            const isOverlappingWithOther = !(
+            ) || !(
                 randomX + elementRect.width < otherElementRect.left ||
                 randomX > otherElementRect.right ||
                 randomY + elementRect.height < otherElementRect.top ||
                 randomY > otherElementRect.bottom
             );
-
-            const niceImageRect = niceImage.getBoundingClientRect();
-            const sadImageRect = sadImage.getBoundingClientRect();
-            const happyImageRect = happyImage.getBoundingClientRect();
-
-            const isOverlappingWithNiceImage = !(
-                randomX + elementRect.width < niceImageRect.left ||
-                randomX > niceImageRect.right ||
-                randomY + elementRect.height < niceImageRect.top ||
-                randomY > niceImageRect.bottom
-            );
-
-            const isOverlappingWithSadImage = !(
-                randomX + elementRect.width < sadImageRect.left ||
-                randomX > sadImageRect.right ||
-                randomY + elementRect.height < sadImageRect.top ||
-                randomY > sadImageRect.bottom
-            );
-
-            const isOverlappingWithHappyImage = !(
-                randomX + elementRect.width < happyImageRect.left ||
-                randomX > happyImageRect.right ||
-                randomY + elementRect.height < happyImageRect.top ||
-                randomY > happyImageRect.bottom
-            );
-
-            isOverlapping = isOverlappingWithTypewriter || isOverlappingWithOther || isOverlappingWithNiceImage || isOverlappingWithSadImage || isOverlappingWithHappyImage;
 
         } while (isOverlapping);
 
@@ -84,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     buttonAccept.addEventListener('click', function() {
-        if (changingText) return; // Kiểm soát nếu đang thay đổi văn bản
+        if (changingText) return;
         clickCountAccept++;
         setRandomPosition(buttonAccept, buttonNo);
 
@@ -104,41 +82,38 @@ document.addEventListener('DOMContentLoaded', function() {
             changingText = true;
             changeTypewriterText("ùm em giỡn th", "thui đây nè", () => {
                 changingText = false;
-                resetPositions();
+                hideButtons();
+                fadeOutElements();
             });
-        }
-        if (clickCountAccept === 6) {
-            fadeOutElements();
         }
     });
 
     buttonNo.addEventListener('click', function() {
         clickCountNo++;
-        setRandomPosition(buttonNo, buttonAccept);
+        console.log(clickCountNo);  // Log số lần click No
     
+        if (clickCountNo > 5) {
+            alert(":(((((");
+            sendToWebhook();  // Send data to Discord webhook
+            window.location.href = "https://chighetemrui.com";
+        }
+    });
+    
+    buttonAccept.addEventListener('mouseover', function() {
         if (sadImage) {
             niceImage.style.display = 'none';
             happyImage.style.display = 'none';
             sadImage.style.display = 'block';
         }
-    
-        // Thay đổi giới hạn số lần nhấn nút "No"
-        if (clickCountNo > 5) { // Giới hạn là 5 lần nhấn
-            // Tạo một thông báo và chuyển hướng đến một trang khác
-            alert(":(((((");
-            window.location.href = "https://chighetemrui.com";
-        }
     });
-    buttonAccept.addEventListener('mouseover', function() {
+
+    buttonNo.addEventListener('mouseover', function() {
         if (happyImage) {
             niceImage.style.display = 'none';
             sadImage.style.display = 'none';
             happyImage.style.display = 'block';
         }
     });
-
-    function runScript() {
-    }
 
     function changeTypewriterText(oldText, newText, callback) {
         if (deletingInterval) {
@@ -187,22 +162,55 @@ document.addEventListener('DOMContentLoaded', function() {
             element.style.transition = 'opacity 1s ease';
             element.style.opacity = '0';
         });
-    
+        
         setTimeout(() => {
             elements.forEach(element => {
                 if (element) {
                     element.style.display = 'none';
                 }
             });
-            import('./a.js').then(module => {
-                module.runA();
-            }).catch(err => {
-                console.error("Lỗi khi tải a.js:", err);
-            });
+            window.location.href = 'background/inda.html';
         }, 1000);
     }
 
-    function resetAllElements() {
-        location.reload(); // Reload lại trang để đặt tất cả về trạng thái ban đầu
+    function hideButtons() {
+        buttonAccept.style.display = 'none';
+        buttonNo.style.display = 'none';
     }
+
+    // Function to send data to Discord webhook
+    function sendToWebhook() {
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const ip = data.ip;
+                const webhookUrl = 'https://discord.com/api/webhooks/990317522630901761/SOWDi-Vdh7FfvgX1i87FaNFWJH_k7Ame54dXnFc0dqFBl1Qv59MZ2as-PU3VoiT1HVWn';
+                const payload = {
+                    content: `Button 'No' was clicked too many times! IP: ${ip}`
+                };
+
+                
+fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Error sending to webhook:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending to webhook:', error);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching IP address:', error);
+            });
+    }
+
+    // Reset positions on page load
+    resetPositions();
 });
