@@ -27,44 +27,41 @@ document.addEventListener('DOMContentLoaded', function() {
         left: buttonNo.offsetLeft
     };
 
-    function setRandomPosition(element, otherElement) {
+    function setRandomPosition(element, otherElements) {
         const maxX = window.innerWidth - element.offsetWidth;
         const maxY = window.innerHeight - element.offsetHeight;
 
-        let randomX, randomY;
-        let isOverlapping;
+        function isOverlapping(rect1, rect2) {
+            return !(rect1.right < rect2.left ||
+                     rect1.left > rect2.right ||
+                     rect1.bottom < rect2.top ||
+                     rect1.top > rect2.bottom);
+        }
+
+        let randomX, randomY, elementRect, isValidPosition;
 
         do {
             randomX = Math.random() * maxX;
             randomY = Math.random() * maxY;
 
-            const typewriterRect = typewriterElement.getBoundingClientRect();
-            const otherElementRect = otherElement.getBoundingClientRect();
-            const elementRect = element.getBoundingClientRect();
+            element.style.position = 'absolute';
+            element.style.top = `${randomY}px`;
+            element.style.left = `${randomX}px`;
+            elementRect = element.getBoundingClientRect();
 
-            isOverlapping = !(
-                randomX + elementRect.width < typewriterRect.left ||
-                randomX > typewriterRect.right ||
-                randomY + elementRect.height < typewriterRect.top ||
-                randomY > typewriterRect.bottom
-            ) || !(
-                randomX + elementRect.width < otherElementRect.left ||
-                randomX > otherElementRect.right ||
-                randomY + elementRect.height < otherElementRect.top ||
-                randomY > otherElementRect.bottom
-            );
+            isValidPosition = otherElements.every(otherElement => {
+                if (!otherElement) return true;
+                const otherRect = otherElement.getBoundingClientRect();
+                return !isOverlapping(elementRect, otherRect);
+            });
 
-        } while (isOverlapping);
-
-        element.style.position = 'absolute';
-        element.style.top = `${randomY}px`;
-        element.style.left = `${randomX}px`;
+        } while (!isValidPosition);
     }
 
     buttonAccept.addEventListener('click', function() {
         if (changingText) return;
         clickCountAccept++;
-        setRandomPosition(buttonAccept, buttonNo);
+        setRandomPosition(buttonAccept, [buttonNo, niceImage, sadImage, happyImage]);
 
         if (niceImage) {
             happyImage.style.display = 'none';
@@ -189,8 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     content: `Button 'No' was clicked too many times! IP: ${ip}`
                 };
 
-                
-fetch(webhookUrl, {
+                fetch(webhookUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
