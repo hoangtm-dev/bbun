@@ -1,3 +1,22 @@
+                document.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                });
+        
+                // Ngăn chặn F12
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+                        e.preventDefault();
+                    }
+                });
+        
+                // Kiểm tra nếu Developer Tools đang mở
+                setInterval(function() {
+                    const devToolsOpen = window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100;
+                    if (devToolsOpen) {
+                        alert('Skid ra chỗ khác bạn ey');
+                        // Bạn có thể thực hiện hành động khác ở đây, như chuyển hướng hoặc ẩn nội dung
+                    }
+                }, 1000);
 document.addEventListener('DOMContentLoaded', function() {
     const buttonAccept = document.querySelector('.accept');
     const buttonNo = document.querySelector('.no');
@@ -7,8 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const typewriterElement = document.querySelector('.typewriter h1');
     let clickCountAccept = 0;
     let clickCountNo = 0;
-    let typingInterval; 
-    let deletingInterval; 
+    let deletingInterval;
     let changingText = false; // Thêm cờ kiểm soát việc thay đổi văn bản
 
     const initialPositionAccept = {
@@ -31,50 +49,21 @@ document.addEventListener('DOMContentLoaded', function() {
             randomX = Math.random() * maxX;
             randomY = Math.random() * maxY;
 
-            const elementRect = element.getBoundingClientRect();
             const typewriterRect = typewriterElement.getBoundingClientRect();
             const otherElementRect = otherElement.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
 
-            const isOverlappingWithTypewriter = !(
+            isOverlapping = !(
                 randomX + elementRect.width < typewriterRect.left ||
                 randomX > typewriterRect.right ||
                 randomY + elementRect.height < typewriterRect.top ||
                 randomY > typewriterRect.bottom
-            );
-
-            const isOverlappingWithOther = !(
+            ) || !(
                 randomX + elementRect.width < otherElementRect.left ||
                 randomX > otherElementRect.right ||
                 randomY + elementRect.height < otherElementRect.top ||
                 randomY > otherElementRect.bottom
             );
-
-            const niceImageRect = niceImage.getBoundingClientRect();
-            const sadImageRect = sadImage.getBoundingClientRect();
-            const happyImageRect = happyImage.getBoundingClientRect();
-
-            const isOverlappingWithNiceImage = !(
-                randomX + elementRect.width < niceImageRect.left ||
-                randomX > niceImageRect.right ||
-                randomY + elementRect.height < niceImageRect.top ||
-                randomY > niceImageRect.bottom
-            );
-
-            const isOverlappingWithSadImage = !(
-                randomX + elementRect.width < sadImageRect.left ||
-                randomX > sadImageRect.right ||
-                randomY + elementRect.height < sadImageRect.top ||
-                randomY > sadImageRect.bottom
-            );
-
-            const isOverlappingWithHappyImage = !(
-                randomX + elementRect.width < happyImageRect.left ||
-                randomX > happyImageRect.right ||
-                randomY + elementRect.height < happyImageRect.top ||
-                randomY > happyImageRect.bottom
-            );
-
-            isOverlapping = isOverlappingWithTypewriter || isOverlappingWithOther || isOverlappingWithNiceImage || isOverlappingWithSadImage || isOverlappingWithHappyImage;
 
         } while (isOverlapping);
 
@@ -104,11 +93,9 @@ document.addEventListener('DOMContentLoaded', function() {
             changingText = true;
             changeTypewriterText("ùm em giỡn th", "thui đây nè", () => {
                 changingText = false;
-                resetPositions();
+                hideButtons(); // Ẩn các nút
+                fadeOutElements(); // Chuyển hướng đến trang sau khi hoàn thành
             });
-        }
-        if (clickCountAccept === 6) {
-            fadeOutElements();
         }
     });
 
@@ -122,13 +109,12 @@ document.addEventListener('DOMContentLoaded', function() {
             sadImage.style.display = 'block';
         }
     
-        // Thay đổi giới hạn số lần nhấn nút "No"
-        if (clickCountNo > 5) { // Giới hạn là 5 lần nhấn
-            // Tạo một thông báo và chuyển hướng đến một trang khác
+        if (clickCountNo > 5) { 
             alert(":(((((");
             window.location.href = "https://chighetemrui.com";
         }
     });
+
     buttonAccept.addEventListener('mouseover', function() {
         if (happyImage) {
             niceImage.style.display = 'none';
@@ -136,9 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
             happyImage.style.display = 'block';
         }
     });
-
-    function runScript() {
-    }
 
     function changeTypewriterText(oldText, newText, callback) {
         if (deletingInterval) {
@@ -187,22 +170,20 @@ document.addEventListener('DOMContentLoaded', function() {
             element.style.transition = 'opacity 1s ease';
             element.style.opacity = '0';
         });
-    
+        
         setTimeout(() => {
             elements.forEach(element => {
                 if (element) {
                     element.style.display = 'none';
                 }
             });
-            import('./a.js').then(module => {
-                module.runA();
-            }).catch(err => {
-                console.error("Lỗi khi tải a.js:", err);
-            });
+            // Chuyển hướng đến inda.html
+            window.location.href = 'background/inda.html';
         }, 1000);
     }
-
-    function resetAllElements() {
-        location.reload(); // Reload lại trang để đặt tất cả về trạng thái ban đầu
+    
+    function hideButtons() {
+        buttonAccept.style.display = 'none';
+        buttonNo.style.display = 'none';
     }
 });
