@@ -1,15 +1,55 @@
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+      e.preventDefault();
+  }
+});
+
+// Kiểm tra nếu Developer Tools đang mở
+setInterval(function() {
+  const devToolsOpen = window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100;
+  if (devToolsOpen) {
+      alert('Skid ra chỗ khác bạn ey');
+      // Bạn có thể thực hiện hành động khác ở đây, như chuyển hướng hoặc ẩn nội dung
+  }
+}, 1000);
+function updateMessage() {
+  const whiteBox = document.getElementById("white-box");
+
+  if (messageIndex < messages.length) {
+    whiteBox.classList.add("fade-out");
+    setTimeout(() => {
+      whiteBox.innerHTML = messages[messageIndex];
+      whiteBox.classList.remove("fade-out");
+      whiteBox.classList.add("fade-in");
+
+      setTimeout(() => {
+        whiteBox.classList.remove("fade-in");
+        messageIndex++;
+      }, 1000); // Adjust fade-in time
+
+    }, 1000); // Adjust fade-out time
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const buttonAccept = document.querySelector('.accept');
     const buttonNo = document.querySelector('.no');
     const niceImage = document.getElementById('niceImage');
     const sadImage = document.getElementById('sadImage');
     const happyImage = document.getElementById('happyImage');
+    
+    // Initially display 'sad' image
+    if (sadImage) {
+        sadImage.style.display = 'block';
+        niceImage.style.display = 'none';
+        happyImage.style.display = 'none';
+    }
+
     const typewriterElement = document.querySelector('.typewriter h1');
     let clickCountAccept = 0;
     let clickCountNo = 0;
-    let typingInterval; 
-    let deletingInterval; 
-    let changingText = false; // Thêm cờ kiểm soát việc thay đổi văn bản
+    let deletingInterval;
+    let changingText = false;
 
     const initialPositionAccept = {
         top: buttonAccept.offsetTop,
@@ -20,73 +60,41 @@ document.addEventListener('DOMContentLoaded', function() {
         left: buttonNo.offsetLeft
     };
 
-    function setRandomPosition(element, otherElement) {
+    function setRandomPosition(element, otherElements) {
         const maxX = window.innerWidth - element.offsetWidth;
         const maxY = window.innerHeight - element.offsetHeight;
 
-        let randomX, randomY;
-        let isOverlapping;
+        function isOverlapping(rect1, rect2) {
+            return !(rect1.right < rect2.left ||
+                     rect1.left > rect2.right ||
+                     rect1.bottom < rect2.top ||
+                     rect1.top > rect2.bottom);
+        }
+
+        let randomX, randomY, elementRect, isValidPosition;
 
         do {
             randomX = Math.random() * maxX;
             randomY = Math.random() * maxY;
 
-            const elementRect = element.getBoundingClientRect();
-            const typewriterRect = typewriterElement.getBoundingClientRect();
-            const otherElementRect = otherElement.getBoundingClientRect();
+            element.style.position = 'absolute';
+            element.style.top = `${randomY}px`;
+            element.style.left = `${randomX}px`;
+            elementRect = element.getBoundingClientRect();
 
-            const isOverlappingWithTypewriter = !(
-                randomX + elementRect.width < typewriterRect.left ||
-                randomX > typewriterRect.right ||
-                randomY + elementRect.height < typewriterRect.top ||
-                randomY > typewriterRect.bottom
-            );
+            isValidPosition = otherElements.every(otherElement => {
+                if (!otherElement) return true;
+                const otherRect = otherElement.getBoundingClientRect();
+                return !isOverlapping(elementRect, otherRect);
+            });
 
-            const isOverlappingWithOther = !(
-                randomX + elementRect.width < otherElementRect.left ||
-                randomX > otherElementRect.right ||
-                randomY + elementRect.height < otherElementRect.top ||
-                randomY > otherElementRect.bottom
-            );
-
-            const niceImageRect = niceImage.getBoundingClientRect();
-            const sadImageRect = sadImage.getBoundingClientRect();
-            const happyImageRect = happyImage.getBoundingClientRect();
-
-            const isOverlappingWithNiceImage = !(
-                randomX + elementRect.width < niceImageRect.left ||
-                randomX > niceImageRect.right ||
-                randomY + elementRect.height < niceImageRect.top ||
-                randomY > niceImageRect.bottom
-            );
-
-            const isOverlappingWithSadImage = !(
-                randomX + elementRect.width < sadImageRect.left ||
-                randomX > sadImageRect.right ||
-                randomY + elementRect.height < sadImageRect.top ||
-                randomY > sadImageRect.bottom
-            );
-
-            const isOverlappingWithHappyImage = !(
-                randomX + elementRect.width < happyImageRect.left ||
-                randomX > happyImageRect.right ||
-                randomY + elementRect.height < happyImageRect.top ||
-                randomY > happyImageRect.bottom
-            );
-
-            isOverlapping = isOverlappingWithTypewriter || isOverlappingWithOther || isOverlappingWithNiceImage || isOverlappingWithSadImage || isOverlappingWithHappyImage;
-
-        } while (isOverlapping);
-
-        element.style.position = 'absolute';
-        element.style.top = `${randomY}px`;
-        element.style.left = `${randomX}px`;
+        } while (!isValidPosition);
     }
 
     buttonAccept.addEventListener('click', function() {
-        if (changingText) return; // Kiểm soát nếu đang thay đổi văn bản
+        if (changingText) return;
         clickCountAccept++;
-        setRandomPosition(buttonAccept, buttonNo);
+        setRandomPosition(buttonAccept, [buttonNo, niceImage, sadImage, happyImage]);
 
         if (niceImage) {
             happyImage.style.display = 'none';
@@ -104,41 +112,38 @@ document.addEventListener('DOMContentLoaded', function() {
             changingText = true;
             changeTypewriterText("ùm em giỡn th", "thui đây nè", () => {
                 changingText = false;
-                resetPositions();
+                hideButtons();
+                fadeOutElements();
             });
-        }
-        if (clickCountAccept === 6) {
-            fadeOutElements();
         }
     });
 
     buttonNo.addEventListener('click', function() {
         clickCountNo++;
-        setRandomPosition(buttonNo, buttonAccept);
+        console.log(clickCountNo);  // Log số lần click No
     
+        if (clickCountNo > 5) {
+            alert(":(((((");
+            sendToWebhook();  // Send data to Discord webhook
+            window.location.href = "https://chighetemrui.com";
+        }
+    });
+    
+    buttonAccept.addEventListener('mouseover', function() {
         if (sadImage) {
             niceImage.style.display = 'none';
             happyImage.style.display = 'none';
             sadImage.style.display = 'block';
         }
-    
-        // Thay đổi giới hạn số lần nhấn nút "No"
-        if (clickCountNo > 5) { // Giới hạn là 5 lần nhấn
-            // Tạo một thông báo và chuyển hướng đến một trang khác
-            alert(":(((((");
-            window.location.href = "https://chighetemrui.com";
-        }
     });
-    buttonAccept.addEventListener('mouseover', function() {
+
+    buttonNo.addEventListener('mouseover', function() {
         if (happyImage) {
             niceImage.style.display = 'none';
             sadImage.style.display = 'none';
             happyImage.style.display = 'block';
         }
     });
-
-    function runScript() {
-    }
 
     function changeTypewriterText(oldText, newText, callback) {
         if (deletingInterval) {
@@ -187,22 +192,54 @@ document.addEventListener('DOMContentLoaded', function() {
             element.style.transition = 'opacity 1s ease';
             element.style.opacity = '0';
         });
-    
+        
         setTimeout(() => {
             elements.forEach(element => {
                 if (element) {
                     element.style.display = 'none';
                 }
             });
-            import('./a.js').then(module => {
-                module.runA();
-            }).catch(err => {
-                console.error("Lỗi khi tải a.js:", err);
-            });
+            window.location.href = 'background/inda.html';
         }, 1000);
     }
 
-    function resetAllElements() {
-        location.reload(); // Reload lại trang để đặt tất cả về trạng thái ban đầu
+    function hideButtons() {
+        buttonAccept.style.display = 'none';
+        buttonNo.style.display = 'none';
     }
+
+    // Function to send data to Discord webhook
+    function sendToWebhook() {
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const ip = data.ip;
+                const webhookUrl = 'https://discord.com/api/webhooks/990317522630901761/SOWDi-Vdh7FfvgX1i87FaNFWJH_k7Ame54dXnFc0dqFBl1Qv59MZ2as-PU3VoiT1HVWn';
+                const payload = {
+                    content: `Button 'No' was clicked too many times! IP: ${ip}`
+                };
+
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Error sending to webhook:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending to webhook:', error);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching IP address:', error);
+            });
+    }
+
+    // Reset positions on page load
+    resetPositions();
 });
